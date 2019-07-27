@@ -1,143 +1,132 @@
-#include<stdio.h>
-#include<string.h>
-#include<string>
-#include<stdlib.h>
-#include<math.h>
-#include<algorithm>
-#include<queue>
-#include<stack>
-#include<set>
-#include<map>
-#include<vector>
-#include<iostream>
-#include<bitset>
-#include<unordered_map>
+#include <iostream>
+#include <string.h>
+#include <algorithm>
+#include <stdio.h>
+#include <math.h>
+#include <queue>
+#define MAXN 3e6+10
+#define inf 0x3f3f3f3f
 using namespace std;
-#define sca(a) scanf("%d",&a)
-#define out(a) printf("%d\n",a)
-#define mes(x,a); memset(x,a,sizeof(x));
-#define mk(a,b) make_pair(a,b)
-#define lowbit(x)  x & (-x)
-#define ll long long
-#define fi first
-#define se second
-#define pii pair<int, int>
-#define ull unsigned long long
-const int maxn=1e7+5;
-const int maxm=2e6+5;
-const int inf =0x3f3f3f3f;
-const int mod=998244353;
-const double eps=1e-9;
-const double pi=acos(-1);
-const int siz=2;
-int m,n,w;
-ll gc[maxn];
-ll sum[maxn];
-void init()
+const int N=3e6+10;
+typedef long long ll;
+int a[N],L[N],R[N],s[N],top,b[N];
+ll sum[N],ans=-0x7f7f7f7f,n,h[N];
+ll l=1,r=1;
+struct node
 {
-    int n=1e7;
-    sum[1]=1;
-    for(int i=2; i<=n; i++)
-    {
-        sum[i]=i;
-        gc[i]=i;
-    }
-    for(int i=2; i<=n; i++)
-    {
-        if(gc[i]==i)
-        {
-            for(int j=i; j<=n; j+=i)
-                gc[j]=gc[j]/i*(i-1);
-        }
-    }
-    for(int i=2; i<=n; i++)
-    {
-        int k=1;
-        for(int j=i; j<=n; j+=i)
-        {
-            sum[j]=sum[j]+gc[i]*k;
-            k++;
-        }
-        sum[i]%=mod;
-    }
-}
-ll gcd(ll a,ll b)
+    int l,r;
+    ll mx;
+    ll mn;
+} tree[N<<2];
+void pushup(int index)
 {
-    if(b==0)
-        return a;
-    return gcd(b,a%b);
+    tree[index].mx = max(tree[index<<1].mx,tree[index<<1|1].mx);
+    tree[index].mn = min(tree[index<<1].mn,tree[index<<1|1].mn);
 }
-template <class T>
-ll getans(T a)
+ 
+int cnt;
+void build(int l,int r,int index)
 {
-    ll ans=0;
-    T j=1;
-    T aa=2,b;
-    if(a<7)
+    tree[index].l = l;
+    tree[index].r = r;
+    if(l == r)
     {
-        j=1;
-        ans=1;
+        tree[index].mn = tree[index].mx =sum[++cnt];
+        return ;
     }
-    else
-    {
-        aa=j*j*j;
-        b=(j+1)*(j+1)*(j+1);
-        while(b<=a+1)
-        {
-            T bb=b-aa;
-            int num1=bb%j;
-            int num2=bb/j;
-            ans=ans+num2*sum[j];
-            if(num1)
-            {
-                int k=1;
-                ans+=j;
-                while(--num1)
-                {
-                    ans+=gcd(k,j);
-                    k++;
-                }
-            }
-            j++;
-            aa=b;
-            b=(j+1)*(j+1)*(j+1);
-        }
-    }
-    int cnt1=(a+1)-aa;
-    int num1=cnt1%j;
-    int num2=cnt1/j;
-    ans+=num2*sum[j];
-    if(num1)
-    {
-        int k=1;
-        ans+=j;
-        while(--num1)
-        {
-            ans+=gcd(k,j);
-            k++;
-        }
-    }
-    return ans%mod;
+    int mid = (l+r)>>1;
+    build(l,mid,index<<1);
+    build(mid+1,r,index<<1|1);
+    pushup(index);
 }
-template <class T>
-void read(T &x)
+ 
+ll queryMIN(int l,int r,int index)
 {
-    static char ch;
-    static bool neg;
-    for(ch=neg=0; ch<'0' || '9'<ch; neg|=ch=='-',ch=getchar());
-    for(x=0; '0'<=ch && ch<='9'; (x*=10)+=ch-'0',ch=getchar());
-    x=neg?-x:x;
+    if(l <= tree[index].l && r >= tree[index].r)
+    {
+        return tree[index].mn;
+    }
+    int mid = (tree[index].l+tree[index].r)>>1;
+    ll Min =0x7f7f7f7f;
+    if(l <= mid)
+    {
+        Min = min(queryMIN(l,r,index<<1),Min);
+    }
+    if(r > mid)
+    {
+        Min = min(queryMIN(l,r,index<<1|1),Min);
+    }
+    return Min;
 }
-
+ll queryMAX(int l,int r,int index)
+{
+    if(l <= tree[index].l && r >= tree[index].r)
+    {
+        return tree[index].mx;
+    }
+    int mid = (tree[index].l+tree[index].r)>>1;
+    ll Max = -0x7f7f7f7f;
+    if(l <= mid)
+    {
+        Max = max(queryMAX(l,r,index<<1),Max);
+    }
+    if(r > mid)
+    {
+        Max = max(queryMAX(l,r,index<<1|1),Max);
+    }
+    return Max;
+}
 int main()
 {
-    init();
-    __int128 n;
-    int t;
-    read(t);
-    while(t--)
+    ios::sync_with_stdio(false);
+    cin>>n;
+    memset(sum,0,sizeof(sum));
+    for(int i=1; i<=n; i++)
     {
-        read(n);
-        printf("%I64d\n",getans(n));
+        cin>>a[i];
     }
+    for(int i=1; i<=n; i++)
+    {
+        cin>>b[i];
+        sum[i]=sum[i-1]+b[i];
+    }
+    build(1,n+1,1);
+    top=0;
+    for(int i=1; i<=n; i++)
+    {
+        while(top&&a[s[top]]>=a[i])
+            --top;
+        L[i]=(top==0?1:s[top]+1);
+        s[++top]=i;
+    }
+    top=0;
+    for(int i=n; i>=1; i--)
+    {
+        while(top&&a[s[top]]>=a[i])
+            --top;
+        R[i]=(top==0?n:s[top]-1);
+        s[++top]=i;
+    }
+    for(int i=1; i<=n; i++)
+    {
+        ll temp;
+        if(a[i]>0)
+        {
+            temp =(sum[R[i]] - sum[L[i]-1])*a[i];
+        }
+        else if(a[i]<0)
+        {
+            if(L[i]==1 && queryMAX(max(1,L[i]-1),max(1,i-1),1)<0)
+                temp=(queryMIN(i,R[i],1))*a[i];
+            else
+                temp =(queryMIN(i,R[i],1)-queryMAX(max(1,L[i]-1),max(1,i-1),1))*a[i];
+        }
+        else if(a[i]==0)
+            temp=0;
+        if(temp>ans)
+        {
+            ans=temp;
+        }
+    }
+    cout<<ans<<endl;
 }

@@ -10,7 +10,7 @@ typedef long long LL;
 const int N = 3e6+5;
 const LL INF = 0x3f3f3f3f3f3f3f3fLL;
 
-LL stTable1[N][22], stTable2[N][22];
+LL stTable1[N][30], stTable2[N][30];
 int _log[N];
 
 void _logPreWork() {
@@ -61,7 +61,7 @@ struct Node
     Node(int l, LL num, int index):l(l), num(num), index(index){}
 };
 
-LL a[N], b[N];
+LL a[N], b[N], c[N];
 stack<Node> stk;
 
 int main(){
@@ -72,25 +72,21 @@ int main(){
     int n;
     scanf("%d", &n);
     for(int i = 0; i < n; i ++) scanf("%lld", &a[i]);
-    for(int i = 0; i < n; i ++) scanf("%lld", &b[i]);
+    for(int i = 0; i < n; i ++) scanf("%lld", &c[i]);
     a[n] = -INF;
-    b[n] = -INF;
-    LL ans = -INF;
+    c[n] = -INF;
     for(int i = 0; i <= n; i ++){
-        stTable1[i+1][0] = stTable1[i][0] + b[i];
-        stTable2[i][0] = stTable1[i][0];
+        b[i+1] = b[i] + c[i];
+        stTable1[i][0] = stTable2[i][0] = b[i];
     }
     stPreWork1(n);
     stPreWork2(n);
+    LL ans = -INF;
     for(int i = 0; i <= n; i ++){
         Node tmp(i, a[i], i);
         while(!stk.empty() && a[i] <= stk.top().num){
             tmp.l = stk.top().l;
-            LL cur1 = 1LL * (rmqMax(stk.top().index+1, i) - rmqMin(stk.top().l, stk.top().index)) * stk.top().num;
-            LL cur2 = 1LL * (rmqMin(stk.top().index+1, i) - rmqMax(stk.top().l, stk.top().index)) * stk.top().num;
-            LL cur = max(cur1, cur2);
-            fuck(stk.top().index);
-            fuck(cur);
+            LL cur = 1LL * (rmqMax(stk.top().index+1, i) - rmqMin(stk.top().l, stk.top().index)) * stk.top().num;
             stk.pop();
             ans = max(cur, ans);
         }

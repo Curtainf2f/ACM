@@ -21,7 +21,11 @@ int main(){
     int n = random(N) + 1;
     printf("%d\n", n);
     for(int i = 1; i <= n; i ++){
-        printf("%d ", random(3) - 1);
+        printf("%d ", random(21) - 10);
+    }
+    puts("");
+    for(int i = 1; i <= n; i ++){
+        printf("%d ", random(21) - 10);
     }
     return 0;
 }

@@ -4,20 +4,20 @@
 #include <cstring>
 #include <ctime>
 
-// ÉèÖÃÇø
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 namespace Settings {
-const int MAX_LEN = 20;  // ·¢ÏÖ´íÎóÊ±,ÏÔÊ¾´íÎóĞĞÊı¾İµÄ×î´ó³¤¶È
-const int CASE_CNT = 1000;                 // ¶ÔÅÄ²âÊÔ´ÎÊı
-const int BUFFER_SIZE = 1 << 10;          // Ã¿ĞĞµÄ»º³åÇø´óĞ¡
-const char *const dataFile = "makedata.cpp";  // Ëæ»úÉú³ÉÊı¾İµÄÔ´´úÂëÎÄ¼şÃû
-const char *const userFile = "user.cpp";  // ĞèÒª²âÊÔµÄÔ´´úÂëÎÄ¼şÃû
-const char *const stdFile = "std.cpp";    // ±ê×¼´ğ°¸µÄÔ´´úÂëÎÄ¼şÃû
+const int MAX_LEN = 20;  // ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½Ê±,ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İµï¿½ï¿½ï¿½ó³¤¶ï¿½
+const int CASE_CNT = 1000;                 // ï¿½ï¿½ï¿½Ä²ï¿½ï¿½Ô´ï¿½ï¿½ï¿½
+const int BUFFER_SIZE = 1 << 10;          // Ã¿ï¿½ĞµÄ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ğ¡
+const char *const dataFile = "makedata.cpp";  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İµï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+const char *const userFile = "user.cpp";  // ï¿½ï¿½Òªï¿½ï¿½ï¿½Ôµï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+const char *const stdFile = "std.cpp";    // ï¿½ï¿½×¼ï¿½ğ°¸µï¿½Ô´ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
 const char *const dataExeName = "pai_data.exe";
 const char *const userExeName = "pai_user.exe";
 const char *const stdExeName = "pai_std.exe";
-const char *const dataOutputName = "1.in";
+const char *const dataOutputName = "data.in";
 const char *const userOutputName = "pai_user.txt";
-const char *const stdOutputName = "1.out";
+const char *const stdOutputName = "data.out";
 }  // namespace Settings
 
 using namespace Settings;
@@ -51,6 +51,7 @@ bool fileCompare(const char *stdOutput, const char *userOutput) {
             if (p2 && p2[len2 - 1] == '\n') p2[len2 - 1] = 0, --len2;
             if (p1 == nullptr || p2 == nullptr || len1 != len2 ||
                 strcmp(p1, p2)) {
+                
                 if (len1 > MAX_LEN)
                     sprintf(p1 + MAX_LEN, "... (%d characters omitted)",
                             len1 - MAX_LEN);

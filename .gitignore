@@ -1,3 +1,6 @@
 *.exe
 *.o
-./.vscode
+/.vscode
+*.in
+*.out
+pai_user.txt
