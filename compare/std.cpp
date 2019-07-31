@@ -1,132 +1,102 @@
-#include <iostream>
-#include <string.h>
-#include <algorithm>
-#include <stdio.h>
-#include <math.h>
-#include <queue>
-#define MAXN 3e6+10
-#define inf 0x3f3f3f3f
+#include<stdio.h>
+#include<string.h>
+#include<string>
+#include<stdlib.h>
+#include<math.h>
+#include<algorithm>
+#include<queue>
+#include<stack>
+#include<set>
+#include<time.h>
+#include<map>
+#include<vector>
+#include<iostream>
 using namespace std;
-const int N=3e6+10;
-typedef long long ll;
-int a[N],L[N],R[N],s[N],top,b[N];
-ll sum[N],ans=-0x7f7f7f7f,n,h[N];
-ll l=1,r=1;
-struct node
+#define sca(a) scanf("%d",&a)
+#define out(a) printf("%d\n",a)
+#define mes(x,a); memset(x,a,sizeof(x));
+#define lowbit(x)  x & (-x)
+#define pb push_back
+#define mp make_pair
+#define all(x) (x).begin(),(x).end()
+#define ll long long
+#define fi first
+#define se second
+#define pii pair<int, int>
+typedef unsigned long long ull;
+const int maxn=5e5+5;
+const int maxm=2e6+5;
+const int inf =0x3f3f3f3f;
+const ll mod=1e9+7;
+const double eps=1e-9;
+const double pi=acos(-1);
+const double e=2.718281828;
+int n,m,w,k;
+ll ans;
+struct ids
 {
-    int l,r;
-    ll mx;
-    ll mn;
-} tree[N<<2];
-void pushup(int index)
+    int x,id;
+} a[6][maxn];
+bool cmp(const ids &a,const ids &b)
 {
-    tree[index].mx = max(tree[index<<1].mx,tree[index<<1|1].mx);
-    tree[index].mn = min(tree[index<<1].mn,tree[index<<1|1].mn);
+    if(a.x==b.x)
+        return a.id<b.id;
+    return a.x>b.x;
 }
- 
-int cnt;
-void build(int l,int r,int index)
-{
-    tree[index].l = l;
-    tree[index].r = r;
-    if(l == r)
-    {
-        tree[index].mn = tree[index].mx =sum[++cnt];
-        return ;
-    }
-    int mid = (l+r)>>1;
-    build(l,mid,index<<1);
-    build(mid+1,r,index<<1|1);
-    pushup(index);
-}
- 
-ll queryMIN(int l,int r,int index)
-{
-    if(l <= tree[index].l && r >= tree[index].r)
-    {
-        return tree[index].mn;
-    }
-    int mid = (tree[index].l+tree[index].r)>>1;
-    ll Min =0x7f7f7f7f;
-    if(l <= mid)
-    {
-        Min = min(queryMIN(l,r,index<<1),Min);
-    }
-    if(r > mid)
-    {
-        Min = min(queryMIN(l,r,index<<1|1),Min);
-    }
-    return Min;
-}
-ll queryMAX(int l,int r,int index)
-{
-    if(l <= tree[index].l && r >= tree[index].r)
-    {
-        return tree[index].mx;
-    }
-    int mid = (tree[index].l+tree[index].r)>>1;
-    ll Max = -0x7f7f7f7f;
-    if(l <= mid)
-    {
-        Max = max(queryMAX(l,r,index<<1),Max);
-    }
-    if(r > mid)
-    {
-        Max = max(queryMAX(l,r,index<<1|1),Max);
-    }
-    return Max;
-}
+bool vis[maxn];
 int main()
 {
-    ios::sync_with_stdio(false);
-    cin>>n;
-    memset(sum,0,sizeof(sum));
-    for(int i=1; i<=n; i++)
+    int _;
+    scanf("%d",&n);
+
+    for(int j=0; j<n; j++)
     {
-        cin>>a[i];
+        for(int i=1; i<=5; i++)
+            scanf("%d",&a[i][j].x),a[i][j].id=j;
     }
-    for(int i=1; i<=n; i++)
+    sort(a[5],a[5]+n,cmp);
+    sort(a[1],a[1]+n,cmp);
+    sort(a[2],a[2]+n,cmp);
+    sort(a[3],a[3]+n,cmp);
+    sort(a[4],a[4]+n,cmp);
+    int q=min(n,5);
+    set<int>se;
+    ans=-inf;
+    for(int i=0; i<q; i++)
     {
-        cin>>b[i];
-        sum[i]=sum[i-1]+b[i];
-    }
-    build(1,n+1,1);
-    top=0;
-    for(int i=1; i<=n; i++)
-    {
-        while(top&&a[s[top]]>=a[i])
-            --top;
-        L[i]=(top==0?1:s[top]+1);
-        s[++top]=i;
-    }
-    top=0;
-    for(int i=n; i>=1; i--)
-    {
-        while(top&&a[s[top]]>=a[i])
-            --top;
-        R[i]=(top==0?n:s[top]-1);
-        s[++top]=i;
-    }
-    for(int i=1; i<=n; i++)
-    {
-        ll temp;
-        if(a[i]>0)
+        vis[a[1][i].id]=1;
+        for(int j=0; j<q; j++)
         {
-            temp =(sum[R[i]] - sum[L[i]-1])*a[i];
+            if(vis[a[2][j].id]==0)
+            {
+                vis[a[2][j].id]=1;
+                for(int k=0; k<q; k++)
+                {
+                    if(!vis[a[3][k].id])
+                    {
+                        vis[a[3][k].id]=1;
+                        for(int l=0; l<q; l++)
+                        {
+                            if(!vis[a[4][l].id])
+                            {
+                                vis[a[4][l].id]=1;
+                                for(int p=0; p<q; p++)
+                                {
+                                    if(vis[a[5][p].id]==0)
+                                        ans=max(ans,1LL*a[1][i].x+a[2][j].x+a[3][k].x+a[4][l].x+a[5][p].x);
+                                }
+                                vis[a[4][l].id]=0;
+                            }
+                        }
+                        vis[a[3][k].id]=0;
+                    }
+                }
+                vis[a[2][j].id]=0;
+            }
         }
-        else if(a[i]<0)
-        {
-            if(L[i]==1 && queryMAX(max(1,L[i]-1),max(1,i-1),1)<0)
-                temp=(queryMIN(i,R[i],1))*a[i];
-            else
-                temp =(queryMIN(i,R[i],1)-queryMAX(max(1,L[i]-1),max(1,i-1),1))*a[i];
-        }
-        else if(a[i]==0)
-            temp=0;
-        if(temp>ans)
-        {
-            ans=temp;
-        }
+        vis[a[1][i].id]=0;
     }
     cout<<ans<<endl;
+    return 0;
 }
+
