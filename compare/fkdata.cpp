@@ -7,7 +7,7 @@
 // ������
 namespace Settings {
 const int MAX_LEN = 20;  // ���ִ���ʱ,��ʾ���������ݵ���󳤶�
-const int CASE_CNT = 1000;                 // ���Ĳ��Դ���
+const int CASE_CNT = 100000;                 // ���Ĳ��Դ���
 const int BUFFER_SIZE = 1 << 10;          // ÿ�еĻ�������С
 const char *const dataFile = "makedata.cpp";  // ����������ݵ�Դ�����ļ���
 const char *const userFile = "user.cpp";  // ��Ҫ���Ե�Դ�����ļ���

@@ -10,21 +10,31 @@ using namespace std;
 
 typedef long long LL;
 
-const int N = 10;
-const int M = 20;
+const int N = 1000;
+const int M = 2000000000;
 
 int random(int n) {
     return (LL) rand() * rand() % n;
 }
 
+
 int main(){
     srand(time(0));
-    int n = random(N) + 5;
-    printf("%d\n", n);
-    for(int i = 1; i <= n; i ++){
-        for(int j = 1; j <= 5; j ++){
-            printf("%d ", random(M) + 1);
+    int t = random(10) + 1;
+    printf("%d\n", t);
+    while (t --)
+    {
+        int n, m;
+        n = random(1000) + 1;
+        m = random(1000) + 1;
+        printf("%d %d\n", n, m);
+        for(int i = 1; i <= n; i ++){
+            for(int j = 1; j <= m; j ++){
+                printf("%d ", random(M) - M/2);
+            }
+            puts("");
         }
+        for(int i = 1; i <= m; i ++) printf("%d ", random(M) - M/2);
         puts("");
     }
     return 0;
