@@ -6,27 +6,25 @@ using namespace std;
     #define test(x)
 #endif
 
-const int N = 200005;
-
 typedef long long LL;
 
-int a[N];
+const int N = 1e5+5;
+const int INF = 0x7fffffff;
 
-int main() {
+int k[N];
+
+int main(){
     #ifdef _LOCAL
         freopen("data.in", "r", stdin);
     #endif
-    int n;
-    a[1] = 6;
-    a[2] = 11;
-    a[3] = 20;
-    while (~scanf("%d", &n))
-    {
-        if(n & 1) puts("0");
-        n /= 2;
-        if(n == 1)
-        else if
-        for(int i = 4)
+    int t;
+    scanf("%d", &t);
+    while(t --){
+        int n;
+        scanf("%d", &n);
+            printf("133");
+            for(int i = 1; i <= n; i ++) printf("7");
+        puts("");
     }
     #ifdef _LOCAL
         fprintf(stderr, "T: %d ms\n", int(1000.0 * clock() / CLOCKS_PER_SEC));

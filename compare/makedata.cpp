@@ -1,41 +1,29 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<time.h>
-#include<iostream>
-#include<algorithm>
-#include<math.h>
-#include<vector>
-#include<assert.h>
+#include<bits/stdc++.h>
+#include <chrono>
+#include <random>
 using namespace std;
 
 typedef long long LL;
 
-const int N = 1000;
-const int M = 2000000000;
-
-int random(int n) {
-    return (LL) rand() * rand() % n;
+int random(int a, int b) {
+    static mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+    return uniform_int_distribution<int>(a, b)(rng);
+}
+ 
+LL random(LL a, LL b) {
+    static mt19937_64 rng(chrono::steady_clock::now().time_since_epoch().count());
+    return uniform_int_distribution<LL>(a, b)(rng);
 }
 
+const int N = 1e5;
 
 int main(){
-    srand(time(0));
-    int t = random(10) + 1;
-    printf("%d\n", t);
-    while (t --)
-    {
-        int n, m;
-        n = random(1000) + 1;
-        m = random(1000) + 1;
-        printf("%d %d\n", n, m);
-        for(int i = 1; i <= n; i ++){
-            for(int j = 1; j <= m; j ++){
-                printf("%d ", random(M) - M/2);
-            }
-            puts("");
-        }
-        for(int i = 1; i <= m; i ++) printf("%d ", random(M) - M/2);
-        puts("");
+    int n = N;
+    int e = N-1;
+    int s = 0;
+    printf("%d %d %d\n", n, s, e);
+    for(int i = 1; i <= n; i ++){
+        printf("%d %d %d\n", i-1, i-1, random(N-5, N));
     }
     return 0;
 }
