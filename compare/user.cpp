@@ -7,54 +7,70 @@ using namespace std;
 #endif
 
 typedef long long LL;
+const int N = 1 << 18;
+const LL INF = 0x7fffffffffffffff;
+LL dp[N][19];
+int rew[19][19];
+int a[N];
+LL q[N];
+int ea[19];
+vector<int> all[19];
 
-struct p
-{
-    long long high, i;
-} temp;
-
-stack<p> s;
-int main()
-{
-    long long li, ans, n;
-
-    while(~scanf("%I64d", &n) && n)
-    {
-        p t;
-        ans = 0;
-        while(!s.empty())
-            s.pop();
-        temp.high=-1;
-        temp.i=0;
-        s.push(temp);
-        LL anss = 0;
-        for(int i = 1; i <= n+1; i++)
-        {
-            if(i != n+1)
-            {
-                scanf("%I64d", &t.high);
-                t.i = i;
-            }
-            else
-            {
-                t.i = n+1;
-                t.high = 0;
-            }
-            while(!s.empty() && t.high < s.top().high)
-            {
-                long long cur;
-                anss ++;
-                temp=s.top();
-                s.pop();
-                test(s.top().i);
-              //  printf("[%I64d %d] %I64d\n",s.top().i,i,temp.high);
-                cur = temp.high * (i - s.top().i-1 );
-                if(cur > ans)
-                    ans = cur;
-            }
-            s.push(t);
-        }
-        printf("%I64d\n", anss);
+int main() {
+    #ifdef _LOCAL
+        freopen("data.in", "r", stdin);
+    #endif
+    int n, m, k;
+    scanf("%d%d%d", &n, &m, &k);
+    for (int i = 0; i < (1 << n); i++)
+        for(int j = 0; j < n; j ++)
+            dp[i][j] = -INF;
+    dp[0][18] = 0;
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &ea[i]);
     }
+    for (int i = 0; i < (1 << n); i++) {
+        int x = i, cur = 0;
+        LL val = 0;
+        for (int j = 0; j < n; j++) {
+            if (((x >> j) & 1) == 1) {
+                cur++;
+                val += 1LL * ea[j];
+            }
+        }
+        all[cur].push_back(i);
+        a[i] = cur;
+        q[i] = val;
+    }
+    for (int i = 0; i < k; i++) {
+        int b, a, c;
+        scanf("%d%d%d", &a, &b, &c);
+        b --;
+        a --;
+        rew[a][b] = c;
+    }
+    for(int i = 1; i <= n; i ++){
+        for(int cas = 0; cas < all[i].size(); cas++){
+            int j = all[i][cas];
+            for (int k = 0; k < n; k++) {
+                if (((j >> k) & 1) == 1) {
+                    int pre = j^(1<<k);
+                    for(int l = 0; l < n; l ++){
+                        dp[j][k] = max(dp[j][k], dp[pre][l] + 1LL*rew[l][k]);
+                        // printf("[%d,%d,%d]=%lld [%d,%d,%d]=%lld %d->%d=+%d\n", i, j, k, dp[i][j][k], i-1, pre, l, dp[i-1][pre][l], l, k, rew[l][k]);
+                    }
+                    dp[j][k] = max(dp[j][k], dp[pre][18]);
+                }
+            }
+        }
+    }
+    LL ans = 0;
+    for (int j = 0; j < (1 << n); j++) {
+        for(int k = 0; k < n; k ++){
+            // printf("%d %d %lld\n", j, a[j], q[j]);
+            if(a[j] <= m) ans = max(ans, q[j] + dp[j][k]);
+        }
+    }
+    printf("%lld\n", ans);
     return 0;
 }
